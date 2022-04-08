@@ -1,4 +1,4 @@
-package com.task.CDQTask.task;
+package com.task.CDQTask.task.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,4 +17,9 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Long base;
+    private Long exponent;
+    private Long result;
+    private String status;
+    private int progress;
 }
