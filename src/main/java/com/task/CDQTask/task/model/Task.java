@@ -17,9 +17,19 @@ public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long base;
-    private Long exponent;
-    private Long result;
+    private int base;
+    private int exponent;
+    private Integer result;
     private String status;
     private int progress;
+
+    @Override
+    public String toString() {
+
+        if (result == null) {
+            return "id: " + id + ", status: " + status + ", progress: " + progress + "%";
+        } else {
+            return "id: " + id + ", status: " + status + ", progress: " + progress + "%, result: " + result;
+        }
+    }
 }
