@@ -36,10 +36,10 @@ public class TaskController {
     @GetMapping("/{id}")
     public ResponseEntity<Task> readTask(@PathVariable Long id) {
         LOGGER.info("Request GET: /id   id=" + id);
-      var task = taskService.getTask(id);
-      if(task == null){
-          return ResponseEntity.notFound().build();
-      }
+        var task = taskService.getTask(id);
+        if (task == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(task);
     }
 
@@ -47,7 +47,7 @@ public class TaskController {
     public ResponseEntity<List<Task>> readAllTasks() {
         LOGGER.info("Request GET: / ");
         var tasks = taskService.getAllTasks();
-        if(tasks.isEmpty()){
+        if (tasks.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(tasks);
