@@ -1,7 +1,9 @@
 package com.task.CDQTask.task.controller;
 
-import com.task.CDQTask.task.dto.TaskDto;
+import com.task.CDQTask.task.dto.TaskRecord;
+import com.task.CDQTask.task.model.Task;
 import com.task.CDQTask.task.service.TaskService;
+import java.util.List;
 import java.util.logging.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -24,23 +26,30 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    //Czy zabezpieczyć przed mnożeniem przez ujemne?
     @Async
     @PostMapping("/")
-    public ResponseEntity createTask(@RequestBody TaskDto task) {
+    public ResponseEntity<Long> createTask(@RequestBody TaskRecord task) {
         LOGGER.info("Request POST: /api/tasks/ " + task);
         return ResponseEntity.accepted().body(taskService.createTask(task));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity readTask(@PathVariable Long id) {
+    public ResponseEntity<Task> readTask(@PathVariable Long id) {
         LOGGER.info("Request GET: /id   id=" + id);
-        return ResponseEntity.ok().body(taskService.getTask(id));
+      var task = taskService.getTask(id);
+      if(task == null){
+          return ResponseEntity.notFound().build();
+      }
+        return ResponseEntity.ok(task);
     }
 
     @GetMapping("/")
-    public ResponseEntity readAllTasks() {
+    public ResponseEntity<List<Task>> readAllTasks() {
         LOGGER.info("Request GET: / ");
-        return ResponseEntity.ok().body(taskService.getAllTasks());
+        var tasks = taskService.getAllTasks();
+        if(tasks.isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(tasks);
     }
 }
