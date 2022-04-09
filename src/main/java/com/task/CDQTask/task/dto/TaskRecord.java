@@ -1,6 +1,10 @@
 package com.task.CDQTask.task.dto;
 
-public record TaskRecord(int base, int exponent) {
+import com.sun.istack.Interned;
+import com.sun.istack.NotNull;
+import javax.persistence.criteria.CriteriaBuilder;
+
+public record TaskRecord(@NotNull Integer base, @NotNull Integer exponent) {
 
     public int getBase() {
         return base;
