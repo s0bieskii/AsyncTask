@@ -4,6 +4,7 @@ import com.task.CDQTask.task.dto.TaskRecord;
 import com.task.CDQTask.task.model.Task;
 import com.task.CDQTask.task.repository.TaskRepository;
 import com.task.CDQTask.task.utils.Config;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.logging.Logger;
 import org.springframework.scheduling.annotation.Async;
@@ -43,13 +44,17 @@ public class TaskService {
 
     @Async
     private void processTask(Task task) {
-        var currentResult = task.getBase();
-        for (int i = 1; i < task.getExponent(); i++) {
-            currentResult = currentResult * task.getExponent();
+        BigDecimal currentResult = BigDecimal.valueOf(1);
+        for (int i = 0; i < Math.abs(task.getExponent()); i++) {
+            if(task.getExponent() >= 0){
+                currentResult = currentResult.multiply(BigDecimal.valueOf(task.getBase()));
+            } else  {
+                currentResult = currentResult.divide(BigDecimal.valueOf(task.getBase()));
+            }
             task.setProgress(calculateProgress(i, task.getExponent()));
             taskRepository.save(task);
             try {
-                Thread.sleep(4000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
