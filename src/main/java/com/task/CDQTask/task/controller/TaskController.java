@@ -5,6 +5,7 @@ import com.task.CDQTask.task.model.Task;
 import com.task.CDQTask.task.service.TaskService;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +29,7 @@ public class TaskController {
 
     @Async
     @PostMapping("/")
-    public ResponseEntity<Long> createTask(@RequestBody TaskRecord task) {
+    public ResponseEntity<Long> createTask(@Valid @RequestBody TaskRecord task) {
         LOGGER.info("Request POST: /api/tasks/ " + task);
         return ResponseEntity.accepted().body(taskService.createTask(task));
     }
