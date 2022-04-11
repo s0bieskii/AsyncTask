@@ -1,13 +1,13 @@
 package com.task.CDQTask.task.controller;
 
-import com.task.CDQTask.task.dto.TaskRecord;
+import com.task.CDQTask.task.dto.TaskAddRecord;
+import com.task.CDQTask.task.dto.TaskIdRecord;
 import com.task.CDQTask.task.model.Task;
 import com.task.CDQTask.task.service.TaskService;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,11 +27,12 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @Async
     @PostMapping("/")
-    public ResponseEntity<Long> createTask(@Valid @RequestBody TaskRecord task) {
+    public ResponseEntity<TaskIdRecord> createTask(@Valid @RequestBody TaskAddRecord task) {
         LOGGER.info("Request POST: /api/tasks/ " + task);
-        return ResponseEntity.accepted().body(taskService.createTask(task));
+        Task savedTask = taskService.createTask(task);
+        taskService.processTask(savedTask);
+        return ResponseEntity.accepted().body(new TaskIdRecord(savedTask.getId()));
     }
 
     @GetMapping("/{id}")

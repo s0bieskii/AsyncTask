@@ -1,12 +1,14 @@
 package com.task.CDQTask;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 import com.task.CDQTask.task.controller.TaskController;
-import com.task.CDQTask.task.dto.TaskRecord;
+import com.task.CDQTask.task.dto.TaskAddRecord;
+import com.task.CDQTask.task.dto.TaskIdRecord;
 import com.task.CDQTask.task.model.Task;
-import com.task.CDQTask.task.service.TaskService;
-import com.task.CDQTask.task.utils.Config;
+import java.net.http.HttpResponse;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
@@ -14,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 
@@ -25,13 +26,30 @@ public class TaskControllerTest {
     private TaskController taskController;
 
     @Test
-    public void testMockito(){
+    public void createTaskWithCorrectBaseAndExponentValueShouldReturn202HTTPStatus(){
         //given
-        TaskRecord taskAddRecord = new TaskRecord(3, 3);
+        TaskAddRecord taskToAdd = new TaskAddRecord(5, 5);
         //when
-        Mockito.when(taskController.createTask(taskAddRecord)).thenReturn(ResponseEntity.ok(Mockito.anyLong()));
+        when(taskController.createTask(taskToAdd))
+                .thenReturn(ResponseEntity.accepted().build());
         //then
-        ResponseEntity<Long> response = taskController.createTask(taskAddRecord);
-        assertTrue(response.getStatusCode().value() == HttpStatus.OK.value());
+        assertEquals(HttpStatus.ACCEPTED.value(), taskController.createTask(taskToAdd).getStatusCodeValue());
     }
+
+    @Test
+    public void createTaskShouldReturnResponseEntityTaskIdRecordBody(){
+        //given
+        TaskAddRecord taskToAdd = new TaskAddRecord(5, 5);
+        Task savedTask = new Task();
+        savedTask.setId(1L);
+        savedTask.setBase(5);
+        savedTask.setExponent(5);
+        TaskIdRecord record = new TaskIdRecord(savedTask.getId());
+        //when
+        when(taskController.createTask(taskToAdd)).thenReturn(ResponseEntity.accepted()
+                .body(record));
+        //then
+        assertEquals(record, taskController.createTask(taskToAdd).getBody());
+    }
+
 }
