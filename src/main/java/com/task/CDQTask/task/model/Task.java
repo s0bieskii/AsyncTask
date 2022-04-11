@@ -23,7 +23,7 @@ public class Task {
     private Long id;
     private int base;
     private int exponent;
-    @Column(precision = 20  , scale = 5)
+    @Column(precision = 20, scale = 5)
     private BigDecimal result;
     private String status;
     private int progress;

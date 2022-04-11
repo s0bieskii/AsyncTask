@@ -1,6 +1,6 @@
 package com.task.CDQTask.task.service;
 
-import com.task.CDQTask.task.dto.TaskRecord;
+import com.task.CDQTask.task.dto.TaskAddRecord;
 import com.task.CDQTask.task.model.Task;
 import com.task.CDQTask.task.repository.TaskRepository;
 import com.task.CDQTask.task.utils.Config;
@@ -21,15 +21,15 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Long createTask(TaskRecord taskRecord) {
+
+    public Task createTask(TaskAddRecord taskRecord) {
         LOGGER.info("createTask taskRecord: " + taskRecord);
         var task = new Task();
         task.setBase(taskRecord.getBase());
         task.setExponent(taskRecord.getExponent());
         task.setStatus(Config.STATUS_RUNNING);
         task = taskRepository.save(task);
-        processTask(task);
-        return task.getId();
+        return task;
     }
 
     public Task getTask(Long id) {
@@ -43,12 +43,12 @@ public class TaskService {
     }
 
     @Async
-    private void processTask(Task task) {
+    public void processTask(Task task) {
         BigDecimal currentResult = BigDecimal.valueOf(1);
         for (int i = 0; i < Math.abs(task.getExponent()); i++) {
-            if(task.getExponent() >= 0){
+            if (task.getExponent() >= 0) {
                 currentResult = currentResult.multiply(BigDecimal.valueOf(task.getBase()));
-            } else  {
+            } else {
                 currentResult = currentResult.divide(BigDecimal.valueOf(task.getBase()));
             }
             task.setProgress(calculateProgress(i, task.getExponent()));
@@ -68,4 +68,6 @@ public class TaskService {
     private int calculateProgress(int currentStep, int allSteps) {
         return Math.round((100f / allSteps) * currentStep);
     }
+
+
 }
