@@ -11,13 +11,6 @@
 - Open projec directory
 - Open console in directory and type:    *docker-compose up*
 
-# IMPORTANT
-Be sure project path looks like below, because GitHub automaticaly add -branchName on the end of downloading folder.
-</br>
-This problem does not occur with git clone, only when download ZIP.
-
-![obraz](https://user-images.githubusercontent.com/42815359/162811293-26c29710-6664-47a9-b753-659030d5338c.png)
-
 # PASSWORDS & PORTS
 
 MYSQLDB_USER=root</br>
