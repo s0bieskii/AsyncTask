@@ -1,4 +1,4 @@
-# Async task recruitment exercise
+# Async recruitment task
 
 
 ### How to run 🔨
