@@ -1,4 +1,4 @@
-# CDQTask
+# Async task recruitment exercise
 
 
 ### How to run 🔨
